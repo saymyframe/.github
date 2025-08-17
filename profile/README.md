@@ -36,5 +36,5 @@ smf create my_app
 ---
 
 ## 🌐 Links
-[Website](https://saymyframe.com) • [Docs](https://docs.saymyframe.com) • [Issues](https://github.com/SayMyFrame/smf_flutter_cli/issues)
+[Website](https://saymyframe.com) • [Docs](https://doc.saymyframe.com) • [Issues](https://github.com/SayMyFrame/smf_flutter_cli/issues)
 
