@@ -36,7 +36,7 @@ dart pub global activate smf_flutter_cli
 smf create my_app
 ```
 
-![SMF CLI Demo](https://github.com/saymyframe/smf_flutter_cli/blob/main/assets/smf_cli.gif)
+![SMF CLI Demo](https://raw.githubusercontent.com/saymyframe/.github/main/assets/smf_cli.gif)
 
 ---
 
