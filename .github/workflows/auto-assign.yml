@@ -1,0 +1,24 @@
+name: Auto Assign (reusable)
+
+on:
+  workflow_call:
+    inputs:
+      assignees:
+        required: false
+        type: string
+        default: ybeshkarov
+
+permissions:
+  issues: write
+  pull-requests: write
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Auto-assign issue/PR
+        uses: pozil/auto-assign-issue@v1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          assignees: ${{ inputs.assignees }}
+          numOfAssignee: 1
