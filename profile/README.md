@@ -2,6 +2,7 @@
 
 [![pub package](https://img.shields.io/pub/v/smf_flutter_cli.svg)](https://pub.dev/packages/smf_flutter_cli)
 [![license](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
+[![Join us on Discord](https://img.shields.io/badge/Join%20us-Discord-5865F2?logo=discord&logoColor=white)](https://saymyframe.com/discord)
 
 **Modular CLI framework for fast Flutter app generation and scalable development**
 
