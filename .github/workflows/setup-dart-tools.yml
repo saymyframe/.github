@@ -1,0 +1,27 @@
+name: "Setup Dart tools"
+description: "Setup Dart SDK, install Melos and Mason, add pub-cache bin to PATH"
+inputs:
+  sdk:
+    description: "Dart SDK version"
+    required: false
+    default: "stable"
+runs:
+  using: "composite"
+  steps:
+    - name: Setup Dart
+      uses: dart-lang/setup-dart@v1
+      with:
+        sdk: ${{ inputs.sdk }}
+
+    - name: Install Melos
+      shell: bash
+      run: dart pub global activate melos
+
+    - name: Install Mason CLI
+      shell: bash
+      run: dart pub global activate mason_cli
+
+    - name: Add pub-cache bin to PATH
+      shell: bash
+      run: echo "$HOME/.pub-cache/bin" >> $GITHUB_PATH
+
