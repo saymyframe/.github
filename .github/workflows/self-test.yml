@@ -1,0 +1,31 @@
+name: Self-test
+
+# Runs the shared actions and reusable workflows from this branch, so changes
+# are verified before other SMF repos pick them up from @main.
+on:
+  pull_request:
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+jobs:
+  setup-dart-tools:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Dart tools
+        uses: ./.github/actions/setup-dart-tools
+        with:
+          sdk: "3.9.0"
+
+      - name: Check installed tools
+        run: |
+          dart --version
+          melos --version
+          mason --version
+
+  auto-assign:
+    uses: ./.github/workflows/auto-assign.yml
