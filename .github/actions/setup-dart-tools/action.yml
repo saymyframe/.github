@@ -12,6 +12,10 @@ runs:
       uses: dart-lang/setup-dart@v1
       with:
         sdk: ${{ inputs.sdk }}
+        # setup-dart >=1.8 registers its matcher via GITHUB_ACTION_PATH, which
+        # points at this composite action, so the matcher file isn't found and
+        # the step fails.
+        problem-matcher: "false"
 
     - name: Install Melos
       shell: bash
