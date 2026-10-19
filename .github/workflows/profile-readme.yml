@@ -1,0 +1,61 @@
+name: Profile README
+
+# Copies the blocks between the profile-sync markers of the README of
+# saymyframe/smf_flutter_cli into profile/README.md, so that the page of the
+# organization shows what the page of that repository shows. A change of that
+# README cannot start a workflow here without a token of another repository,
+# so this one runs once a day, and on a push to main that changes the page, the
+# script or this workflow.
+on:
+  schedule:
+    - cron: "17 5 * * *"
+  push:
+    branches: [main]
+    paths:
+      - profile/README.md
+      - .github/scripts/sync_profile_readme.py
+      - .github/workflows/profile-readme.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: profile-readme
+
+jobs:
+  sync:
+    name: Sync
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      # The README is read at a commit rather than at main, which
+      # raw.githubusercontent.com may serve from its cache for a few minutes.
+      - name: Copy the blocks from the README of smf_flutter_cli
+        id: copy
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          sha=$(gh api repos/saymyframe/smf_flutter_cli/commits/main --jq .sha)
+          curl --fail --silent --show-error --location --retry 3 \
+            "https://raw.githubusercontent.com/saymyframe/smf_flutter_cli/$sha/README.md" \
+            --output "$RUNNER_TEMP/source.md"
+          python3 .github/scripts/sync_profile_readme.py "$RUNNER_TEMP/source.md" profile/README.md
+          echo "sha=$sha" >> "$GITHUB_OUTPUT"
+
+      # A push with the token of the workflow starts no other workflow, so
+      # this one does not run again for its own commit.
+      - name: Commit the page
+        env:
+          SHA: ${{ steps.copy.outputs.sha }}
+        run: |
+          if git diff --quiet -- profile/README.md; then
+            echo "profile/README.md is up to date."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit --quiet --message "docs(profile): copy the README of smf_flutter_cli at ${SHA:0:7}" -- profile/README.md
+          git push

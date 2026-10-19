@@ -27,5 +27,14 @@ jobs:
           melos --version
           mason --version
 
+  profile-readme:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Test the script of the profile README
+        working-directory: .github/scripts
+        run: python3 -m unittest -v
+
   auto-assign:
     uses: ./.github/workflows/auto-assign.yml
